@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const TopNav: React.FC = () => {
     return (
-        <header className="bg-white shadow-soft">
+        <header className="shadow-soft">
             <div className="container mx-auto flex justify-between items-center p-4">
                 <div className="text-xl font-bold text-pink">
                     <Link to="/" className="hover:text-lightPink">ChatMate</Link>
