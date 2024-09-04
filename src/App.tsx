@@ -1,33 +1,22 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <h1 className="text-4xl font-bold text-blue-500">Tailwind CSS is working!</h1>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className="p-4">
+        <button className="btn btn-primary">Primary Button</button>
+        <div className="card w-96 bg-base-100 shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title">Card Title</h2>
+            <p>Card content goes here.</p>
+          </div>
+        </div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
     </>
   )
 }
