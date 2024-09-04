@@ -1,8 +1,7 @@
-// src/components/ModuleList.tsx
 import React from 'react';
 import ModuleCard from './ModuleCard';
 
-// Example modules data
+
 const modules = [
     {
         moduleName: "Personal Assistant",
@@ -16,7 +15,7 @@ const modules = [
         moduleRoute: "/cold",
         img: "/assets/cover/coldEmail.png",
     },
-    // Add other modules here
+
 ];
 
 const ModuleList: React.FC = () => {
