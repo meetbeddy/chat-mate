@@ -1,7 +1,6 @@
 import React from 'react';
 import ModuleCard from './ModuleCard';
 
-
 const modules = [
     {
         moduleName: "Personal Assistant",
@@ -20,7 +19,7 @@ const modules = [
 
 const ModuleList: React.FC = () => {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {modules.map((module, index) => (
                 <ModuleCard
                     key={index}
