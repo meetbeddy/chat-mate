@@ -1,14 +1,13 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-
 import TopNav from './TopNav';
 import Footer from './Footer';
 
 const Layout: React.FC = () => {
     return (
-        <div >
+        <div className="bg-lightGray min-h-screen flex flex-col">
             <TopNav />
-            <main className="p-6 bg-gray-100 min-h-screen">
+            <main className="flex-grow p-6 bg-white shadow-soft">
                 <Outlet />
             </main>
             <Footer />
