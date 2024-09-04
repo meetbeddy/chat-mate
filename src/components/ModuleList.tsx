@@ -1,25 +1,9 @@
 import React from 'react';
 import ModuleCard from './ModuleCard';
-
-const modules = [
-    {
-        moduleName: "Personal Assistant",
-        moduleDescription: "Your very own personal assistant at your service.",
-        moduleRoute: "/assistant",
-        img: "/assets/cover/assistant.png",
-    },
-    {
-        moduleName: "Cold Email",
-        moduleDescription: "Generate cold email templates instantly.",
-        moduleRoute: "/cold",
-        img: "/assets/cover/coldEmail.png",
-    },
-
-];
-
+import modules from "../modules/module.json"
 const ModuleList: React.FC = () => {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {modules.map((module, index) => (
                 <ModuleCard
                     key={index}

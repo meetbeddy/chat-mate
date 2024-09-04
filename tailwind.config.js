@@ -32,13 +32,13 @@ module.exports = {
       borderRadius: {
         'lg': '1rem',
       },
+      backgroundImage: {
+        mainBg: "url('/assets/bg/background.svg')",
+      },
     },
+
   },
-  extend: {
-    backgroundImage: {
-      mainBg: "url('/src/assets/bg/background.svg')",
-    },
-  },
+
   plugins: [require("daisyui"), require("tailwind-scrollbar-hide")],
   daisyui: {
     themes: false,
