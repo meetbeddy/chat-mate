@@ -13,6 +13,7 @@ export const AIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [retryPrompt, setRetryPrompt] = useState<string | null>(null);
 
     const addMessage = (message: Message) => {
         setMessages((prevMessages) => [...prevMessages, message]);
@@ -21,6 +22,7 @@ export const AIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const getResponse = useCallback(async (prompt: string, systemMessage: string) => {
         setIsLoading(true);
         setError(null);
+        setRetryPrompt(prompt);
 
         try {
             if (!API_KEY) {
@@ -52,7 +54,7 @@ export const AIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             const data = await response.json();
             const aiMessage = data.choices[0].message.content;
 
-            addMessage({ role: 'assistant', content: aiMessage });
+            addMessage({ role: 'assistant', content: aiMessage, timestamp: new Date().toISOString() });
         } catch (error) {
             console.error('Error fetching AI response:', error);
             setError(error instanceof Error ? error.message : 'An unknown error occurred');
@@ -61,8 +63,14 @@ export const AIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         }
     }, [messages]);
 
+    const retry = () => {
+        if (retryPrompt) {
+            getResponse(retryPrompt, 'You are a helpful assistant.');
+        }
+    };
+
     return (
-        <AIContext.Provider value={{ messages, addMessage, getResponse, isLoading, error }}>
+        <AIContext.Provider value={{ messages, addMessage, getResponse, isLoading, error, retry }}>
             {children}
         </AIContext.Provider>
     );

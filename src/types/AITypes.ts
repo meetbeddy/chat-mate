@@ -1,6 +1,7 @@
 export interface Message {
 	role: "system" | "user" | "assistant";
 	content: string;
+	timestamp?: string;
 }
 
 export interface AIContextType {
@@ -9,4 +10,5 @@ export interface AIContextType {
 	getResponse: (prompt: string, systemMessage: string) => Promise<void>;
 	isLoading: boolean;
 	error: string | null;
+	retry: () => void;
 }

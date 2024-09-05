@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FaSpinner } from "react-icons/fa";
+import { FaSpinner, FaRedo, FaCopy, FaCheck } from "react-icons/fa";
 import { useAI } from "../hooks/useAI";
 import ReactMarkdown from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
-
+import dayjs from "dayjs";
+// import { debounce } from "lodash";
 
 interface ModuleInteractionProps {
     title: string;
@@ -13,17 +14,30 @@ interface ModuleInteractionProps {
 
 const ModuleInteraction: React.FC<ModuleInteractionProps> = ({ title, placeholder, systemMessage }) => {
     const [input, setInput] = useState("");
-    const { messages, addMessage, getResponse, isLoading, error } = useAI();
+    const [copied, setCopied] = useState<string | null>(null);
+    const { messages, addMessage, getResponse, isLoading, error, retry } = useAI();
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
+
         e.preventDefault();
         if (input.trim()) {
-            addMessage({ role: "user", content: input });
+            addMessage({ role: "user", content: input, timestamp: new Date().toISOString() });
             setInput("");
             await getResponse(input, systemMessage);
         }
+    };
+
+    // const debouncedHandleSubmit = debounce(handleSubmit, 300);
+
+    const handleCopy = (content: string) => {
+        navigator.clipboard.writeText(content)
+            .then(() => {
+                setCopied(content);
+                setTimeout(() => setCopied(null), 2000);
+            })
+            .catch(err => console.error('Failed to copy text: ', err));
     };
 
     useEffect(() => {
@@ -40,7 +54,9 @@ const ModuleInteraction: React.FC<ModuleInteractionProps> = ({ title, placeholde
                 {messages.map((message, index) => (
                     <div key={index} className={`mb-4 ${message.role === "user" ? "text-right" : "text-left"}`}>
                         <div className={`inline-block p-3 rounded-lg ${message.role === "user" ? "bg-pink text-white" : "bg-pastelPink text-darkGray"}`}>
-                            <p className="font-bold mb-1">{message.role === "user" ? "You" : "AI"}</p>
+                            <p className="font-bold mb-1">{message.role === "user" ? "You" : "AI"} {message.timestamp && <span className="text-xs text-gray-500">(
+                                {dayjs(message.timestamp).format('MMM D, YYYY h:mm A')}
+                                )</span>}</p>
                             <div className="prose prose-light dark:prose-dark">
                                 {message.role === "user" ? (
                                     <p>{message.content}</p>
@@ -48,13 +64,22 @@ const ModuleInteraction: React.FC<ModuleInteractionProps> = ({ title, placeholde
                                     <ReactMarkdown rehypePlugins={[rehypeSanitize]}>{message.content}</ReactMarkdown>
                                 )}
                             </div>
+                            {message.role === "assistant" && (
+                                <button
+                                    onClick={() => handleCopy(message.content)}
+                                    className="ml-2 text-blue-500 hover:underline"
+                                    aria-label="Copy to clipboard"
+                                >
+                                    {copied === message.content ? <FaCheck className="inline-block text-green-500" /> : <FaCopy className="inline-block" />}
+                                </button>
+                            )}
                         </div>
                     </div>
                 ))}
                 <div ref={messagesEndRef} />
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={(e) => handleSubmit(e)} className="space-y-4">
                 <textarea
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
@@ -71,6 +96,16 @@ const ModuleInteraction: React.FC<ModuleInteractionProps> = ({ title, placeholde
                     >
                         {isLoading ? <FaSpinner className="animate-spin" /> : "Submit"}
                     </button>
+                    {error && (
+                        <button
+                            type="button"
+                            className="text-pink hover:underline"
+                            onClick={retry}
+                        >
+                            <FaRedo className="inline-block mr-2" />
+                            Retry
+                        </button>
+                    )}
                 </div>
             </form>
 
@@ -80,7 +115,7 @@ const ModuleInteraction: React.FC<ModuleInteractionProps> = ({ title, placeholde
                 </div>
             )}
 
-            {error && (
+            {error && !isLoading && (
                 <div className="mt-6 p-4 bg-red-100 rounded-lg shadow-inner text-red-700">
                     <h3 className="text-lg font-bold mb-2">Error:</h3>
                     <p>{error}</p>
