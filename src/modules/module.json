@@ -9,21 +9,21 @@
     {
       "moduleName": "Cold Email",
       "moduleDescription": "Generate cold email templates instantly.",
-      "moduleRoute": "/cold",
+      "moduleRoute": "/cold-email",
       "img": "/assets/cover/coldEmail.png",
       "prompt": "You are an expert on cold email writting, Write an engaging cold email about"
     },
     {
       "moduleName": "Ai Financial",
       "moduleDescription": "Your very own personal assistant at your service.",
-      "moduleRoute": "/financial",
+      "moduleRoute": "/financial-advisor",
       "img": "/assets/cover/financial.png",
       "prompt": "Act like a financial advisor, provide structured assistance and calculated decision on"
     },
     {
       "moduleName": "Blog Writting",
       "moduleDescription": "Write SEO friendly and engaging blogs.",
-      "moduleRoute": "/blog",
+      "moduleRoute": "/writing-assistant",
       "img": "/assets/cover/blog.png",
       "prompt": "Act as a copywritter, Write a SEO friendly 900-1100 words blog post about"
     },
