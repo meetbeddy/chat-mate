@@ -9,6 +9,7 @@ import CustomerSupportAI from '../modules/CustomerSupportAI';
 import NotFound from '../pages/NotFound';
 import SignupPage from '../pages/auth/SignUpPage';
 import LoginPage from '../pages/auth/SignInPage';
+import PrivateRoute from './PrivateRoute';
 
 export const router = createBrowserRouter([
     {
@@ -18,11 +19,11 @@ export const router = createBrowserRouter([
             { path: "/", element: <LandingPage /> },
             { path: "/signup", element: <SignupPage /> },
             { path: "/login", element: <LoginPage /> },
-            { path: "/assistant", element: <PersonalAssistant /> },
-            { path: "/cold-email", element: <ColdEmail /> },
-            { path: "/financial-advisor", element: <AIFinancialAdvisor /> },
-            { path: "/writing-assistant", element: <WritingAssistant /> },
-            { path: "/customer-support", element: <CustomerSupportAI /> },
+            { path: "/assistant", element: <PrivateRoute><PersonalAssistant /></PrivateRoute> },
+            { path: "/cold-email", element: <PrivateRoute><ColdEmail /> </PrivateRoute> },
+            { path: "/financial-advisor", element: <PrivateRoute><AIFinancialAdvisor /></PrivateRoute> },
+            { path: "/writing-assistant", element: <PrivateRoute><WritingAssistant /></PrivateRoute> },
+            { path: "/customer-support", element: <PrivateRoute><CustomerSupportAI /> </PrivateRoute> },
 
             { path: "*", element: <NotFound /> }
         ],
