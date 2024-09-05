@@ -13,6 +13,8 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
     redirectTo = '/login'
 }) => {
     const { currentUser, loading } = useAuth();
+
+    console.log(currentUser)
     const location = useLocation();
 
     if (loading) {
