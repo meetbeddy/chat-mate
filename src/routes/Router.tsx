@@ -6,6 +6,7 @@ import ColdEmail from '../modules/ColdEmail';
 import AIFinancialAdvisor from '../modules/AIFinancialAdvisor';
 import WritingAssistant from '../modules/WritingAssistant';
 import CustomerSupportAI from '../modules/CustomerSupportAI';
+import NotFound from '../pages/NotFound';
 
 export const router = createBrowserRouter([
     {
@@ -18,6 +19,8 @@ export const router = createBrowserRouter([
             { path: "/financial-advisor", element: <AIFinancialAdvisor /> },
             { path: "/writing-assistant", element: <WritingAssistant /> },
             { path: "/customer-support", element: <CustomerSupportAI /> },
+
+            { path: "*", element: <NotFound /> }
         ],
     },
 ]);
