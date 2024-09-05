@@ -6,7 +6,7 @@ export interface Message {
 export interface AIContextType {
 	messages: Message[];
 	addMessage: (message: Message) => void;
-	getResponse: (prompt: string) => Promise<void>;
+	getResponse: (prompt: string, systemMessage: string) => Promise<void>;
 	isLoading: boolean;
 	error: string | null;
 }

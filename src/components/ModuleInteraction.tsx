@@ -5,9 +5,10 @@ import { useAI } from "../hooks/useAI";
 interface ModuleInteractionProps {
     title: string;
     placeholder: string;
+    systemMessage: string;
 }
 
-const ModuleInteraction: React.FC<ModuleInteractionProps> = ({ title, placeholder }) => {
+const ModuleInteraction: React.FC<ModuleInteractionProps> = ({ title, placeholder, systemMessage }) => {
     const [input, setInput] = useState("");
     const { messages, addMessage, getResponse, isLoading, error } = useAI();
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -18,7 +19,7 @@ const ModuleInteraction: React.FC<ModuleInteractionProps> = ({ title, placeholde
         if (input.trim()) {
             addMessage({ role: "user", content: input });
             setInput("");
-            await getResponse(input);
+            await getResponse(input, systemMessage);
         }
     };
 

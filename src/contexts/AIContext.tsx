@@ -1,6 +1,5 @@
-import React, { createContext, useState, ReactNode } from 'react';
-import { AIContextType, Message } from '../types/AITypes'
-
+import React, { createContext, useState, ReactNode, useCallback } from 'react';
+import { AIContextType, Message } from '../types/AITypes';
 
 export const AIContext = createContext<AIContextType | undefined>(undefined);
 
@@ -19,7 +18,7 @@ export const AIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setMessages((prevMessages) => [...prevMessages, message]);
     };
 
-    const getResponse = async (prompt: string) => {
+    const getResponse = useCallback(async (prompt: string, systemMessage: string) => {
         setIsLoading(true);
         setError(null);
 
@@ -37,7 +36,7 @@ export const AIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 body: JSON.stringify({
                     model: 'gpt-4',
                     messages: [
-                        { role: 'system', content: 'You are a helpful assistant.' },
+                        { role: 'system', content: systemMessage },
                         ...messages,
                         { role: 'user', content: prompt },
                     ],
@@ -60,7 +59,7 @@ export const AIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [messages]);
 
     return (
         <AIContext.Provider value={{ messages, addMessage, getResponse, isLoading, error }}>
@@ -68,4 +67,3 @@ export const AIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         </AIContext.Provider>
     );
 };
-
