@@ -10,6 +10,7 @@ import NotFound from '../pages/NotFound';
 import SignupPage from '../pages/auth/SignUpPage';
 import LoginPage from '../pages/auth/SignInPage';
 import PrivateRoute from './PrivateRoute';
+import PricingPage from '../pages/PricingPage';
 
 export const router = createBrowserRouter([
     {
@@ -17,6 +18,7 @@ export const router = createBrowserRouter([
         element: <Layout />,
         children: [
             { path: "/", element: <LandingPage /> },
+            { path: "/pricing", element: <PricingPage /> },
             { path: "/signup", element: <SignupPage /> },
             { path: "/login", element: <LoginPage /> },
             { path: "/assistant", element: <PrivateRoute><PersonalAssistant /></PrivateRoute> },
