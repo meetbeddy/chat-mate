@@ -5,7 +5,7 @@ import {
     createUserWithEmailAndPassword,
     signOut,
     User,
-    UserCredential
+    AuthError
 } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
 import { AuthContextType } from '../types/AuthTypes';
@@ -24,16 +24,43 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return unsubscribe;
     }, []);
 
-    const login = (email: string, password: string): Promise<UserCredential> => {
-        return signInWithEmailAndPassword(auth, email, password);
+    const login = async (email: string, password: string): Promise<void> => {
+        setLoading(true);
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            setCurrentUser(userCredential.user);
+        } catch (error) {
+            console.error('Login error:', error);
+            throw error as AuthError;
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const signup = (email: string, password: string): Promise<UserCredential> => {
-        return createUserWithEmailAndPassword(auth, email, password);
+    const signup = async (email: string, password: string): Promise<void> => {
+        setLoading(true);
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            setCurrentUser(userCredential.user);
+        } catch (error) {
+            console.error('Signup error:', error);
+            throw error as AuthError;
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const logout = () => {
-        return signOut(auth);
+    const logout = async (): Promise<void> => {
+        setLoading(true);
+        try {
+            await signOut(auth);
+            setCurrentUser(null);
+        } catch (error) {
+            console.error('Logout error:', error);
+            throw error as AuthError;
+        } finally {
+            setLoading(false);
+        }
     };
 
     const value: AuthContextType = {
@@ -46,7 +73,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children}
+            {children}
         </AuthContext.Provider>
     );
 };
