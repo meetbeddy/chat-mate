@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaSpinner } from "react-icons/fa";
 import { useAI } from "../hooks/useAI";
+import ReactMarkdown from "react-markdown";
+import rehypeSanitize from "rehype-sanitize";
+
 
 interface ModuleInteractionProps {
     title: string;
@@ -36,10 +39,15 @@ const ModuleInteraction: React.FC<ModuleInteractionProps> = ({ title, placeholde
             <div ref={chatContainerRef} className="mb-4 h-96 overflow-y-auto border rounded-lg p-4 bg-lightGray scrollbar-hide">
                 {messages.map((message, index) => (
                     <div key={index} className={`mb-4 ${message.role === "user" ? "text-right" : "text-left"}`}>
-                        <div className={`inline-block p-3 rounded-lg ${message.role === "user" ? "bg-pink text-white" : "bg-pastelPink text-darkGray"
-                            }`}>
+                        <div className={`inline-block p-3 rounded-lg ${message.role === "user" ? "bg-pink text-white" : "bg-pastelPink text-darkGray"}`}>
                             <p className="font-bold mb-1">{message.role === "user" ? "You" : "AI"}</p>
-                            <p>{message.content}</p>
+                            <div className="prose prose-light dark:prose-dark">
+                                {message.role === "user" ? (
+                                    <p>{message.content}</p>
+                                ) : (
+                                    <ReactMarkdown rehypePlugins={[rehypeSanitize]}>{message.content}</ReactMarkdown>
+                                )}
+                            </div>
                         </div>
                     </div>
                 ))}
