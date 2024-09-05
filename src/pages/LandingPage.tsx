@@ -3,7 +3,7 @@ import ModuleList from '../components/ModuleList';
 
 const LandingPage: React.FC = () => {
     return (
-        <div className="p-6 min-h-screen ">
+        <div className="pt-20 p-6 min-h-screen">
             <header className="mb-8 text-center">
                 <h1 className="text-5xl font-bold text-darkBlue">
                     Welcome to <span className="text-pink">ChatMate</span>
