@@ -11,6 +11,7 @@ import SignupPage from '../pages/auth/SignUpPage';
 import LoginPage from '../pages/auth/SignInPage';
 import PrivateRoute from './PrivateRoute';
 import PricingPage from '../pages/PricingPage';
+import About from '../pages/About';
 
 export const router = createBrowserRouter([
     {
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
         children: [
             { path: "/", element: <LandingPage /> },
             { path: "/pricing", element: <PricingPage /> },
+            { path: "/about", element: <About /> },
             { path: "/signup", element: <SignupPage /> },
             { path: "/login", element: <LoginPage /> },
             { path: "/assistant", element: <PrivateRoute><PersonalAssistant /></PrivateRoute> },

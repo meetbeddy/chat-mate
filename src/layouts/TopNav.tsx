@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { FaBars, FaTimes, FaUser, FaHome, FaInfoCircle, FaSignInAlt } from 'react-icons/fa';
+import { FaBars, FaTimes, FaUser, FaHome, FaInfoCircle, FaSignInAlt, FaMoneyBill } from 'react-icons/fa';
 import { IoMdLogOut } from 'react-icons/io';
 import { useAuth } from '../hooks/useAuth';
 import { useApiUsage } from '../hooks/useApiUsage';
@@ -63,6 +63,7 @@ const TopNav = () => {
                     <div className="hidden md:flex space-x-4">
                         <NavItem to="/" icon={FaHome}>Home</NavItem>
                         <NavItem to="/about" icon={FaInfoCircle}>About</NavItem>
+                        <NavItem to="/pricing" icon={FaMoneyBill}>Pricing</NavItem>
                         {!currentUser && <NavItem to="/login" icon={FaSignInAlt}>Login</NavItem>}
                     </div>
 
@@ -91,10 +92,10 @@ const TopNav = () => {
                                     </div>
                                 </div>
                                 <MenuItem>
-                                    {({ active }) => (
+                                    {({ disabled }) => (
                                         <button
                                             onClick={logout}
-                                            className={`flex items-center w-full px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                                            className={`flex items-center w-full px-4 py-2 text-sm ${!disabled ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
                                         >
                                             <IoMdLogOut className="mr-2" />
                                             Logout
