@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+	--swal2-color: #ea4c89;
+	--swal2-background: #ffffff;
+	--swal2-title-color: #2d2d39;
+	--swal2-text-color: #495057;
+	--swal2-confirm-button-color: #ea4c89;
+	--swal2-confirm-button-text-color: #ffffff;
+	--swal2-cancel-button-color: #ff6e96;
+	--swal2-cancel-button-text-color: #ffffff;
+}
+
+.swal2-popup {
+	background-color: var(--swal2-background) !important;
+	color: var(--swal2-text-color) !important;
+}
+
+.swal2-title {
+	color: var(--swal2-title-color) !important;
+}
+
+.swal2-confirm {
+	background-color: var(--swal2-confirm-button-color) !important;
+	color: var(--swal2-confirm-button-text-color) !important;
+}
+
+.swal2-cancel {
+	background-color: var(--swal2-cancel-button-color) !important;
+	color: var(--swal2-cancel-button-text-color) !important;
+}

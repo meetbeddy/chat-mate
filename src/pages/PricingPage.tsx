@@ -1,3 +1,4 @@
+import React from 'react';
 
 const PricingPage = () => {
     const pricingPlans = [
@@ -22,26 +23,24 @@ const PricingPage = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-base-200 flex flex-col items-center justify-center">
-            <h1 className="text-4xl font-bold mb-10">Choose Your Plan</h1>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="min-h-screen bg-lightGray flex flex-col items-center justify-center py-10">
+            <h1 className="text-4xl font-bold mb-8 text-darkBlue">Choose Your Plan</h1>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {pricingPlans.map((plan, idx) => (
                     <div
                         key={idx}
-                        className="card w-full bg-white shadow-lg hover:shadow-2xl transition duration-300"
+                        className="card bg-white shadow-lg hover:shadow-xl transition duration-300 rounded-lg p-6"
                     >
                         <div className="card-body">
-                            <h2 className="card-title text-xl">{plan.title}</h2>
-                            <p className="text-3xl font-semibold">{plan.price}</p>
-                            <ul className="my-4">
+                            <h2 className="text-2xl font-semibold text-darkBlue mb-2">{plan.title}</h2>
+                            <p className="text-3xl font-bold text-pink mb-4">{plan.price}</p>
+                            <ul className="list-disc list-inside mb-4">
                                 {plan.features.map((feature, i) => (
-                                    <li key={i} className="text-gray-600">
-                                        {feature}
-                                    </li>
+                                    <li key={i} className="text-gray-600">{feature}</li>
                                 ))}
                             </ul>
-                            <div className="card-actions justify-end">
-                                <button className="btn btn-primary w-full">Upgrade</button>
+                            <div className="card-actions">
+                                <button className="btn btn-primary w-full py-2">Upgrade</button>
                             </div>
                         </div>
                     </div>

@@ -5,6 +5,7 @@ import { useApiKey } from '../hooks/useApiKey';
 import { useMessages } from '../hooks/useMessages';
 import { useApiUsage } from '../hooks/useApiUsage';
 import { callOpenAI } from '../services/openAIServices';
+import Swal from 'sweetalert2';
 
 export const AIContext = createContext<AIContextType | undefined>(undefined);
 
@@ -40,7 +41,19 @@ export const AIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             await updateApiUsage(userId);
         } catch (error) {
             console.error('Error fetching AI response:', error);
-            setError(error instanceof Error ? error.message : 'An unknown error occurred');
+            if (error instanceof Error && error.message === 'API usage limit exceeded') {
+                Swal.fire({
+                    title: 'API Limit Exceeded',
+                    text: 'You have exceeded your API usage limit. Please upgrade to continue using the service.',
+                    icon: 'warning',
+                    confirmButtonText: 'Go to Pricing',
+                    allowOutsideClick: false,
+                }).then(() => {
+                    window.location.href = '/pricing?limitExceeded=true';
+                });
+            } else {
+                setError(error instanceof Error ? error.message : 'An unknown error occurred');
+            }
         } finally {
             setIsLoading(false);
         }
