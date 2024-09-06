@@ -1,13 +1,38 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { FaBars, FaTimes, FaUser, FaHome, FaInfoCircle, FaSignInAlt } from 'react-icons/fa';
 import { IoMdLogOut } from 'react-icons/io';
 import { useAuth } from '../hooks/useAuth';
+import { useApiUsage } from '../hooks/useApiUsage';
+
+interface ApiUsage {
+    apiUsageCount: number;
+    apiLimit: number;
+}
 
 const TopNav = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [apiUsage, setApiUsage] = useState<ApiUsage | null>(null);
     const { currentUser, logout } = useAuth();
+
+    const { getApiUsage } = useApiUsage();
+    const userId = currentUser?.uid;
+
+    useEffect(() => {
+        const fetchApiUsage = async () => {
+            if (userId) {
+                try {
+                    const usage = await getApiUsage(userId);
+                    setApiUsage(usage);
+                } catch (error) {
+                    console.error("Failed to fetch API usage:", error);
+                }
+            }
+        };
+
+        fetchApiUsage();
+    }, [getApiUsage, userId]);
 
     const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -54,11 +79,15 @@ const TopNav = () => {
                                         <p className="text-sm opacity-90">{currentUser.email}</p>
                                     </div>
                                     <div className="py-2 px-4 bg-gray-50">
-                                        <p className="text-sm font-medium text-gray-700">Current Plan: <span className="font-bold text-pink">Pro</span></p>
-                                        <div className="mt-1 bg-gray-200 rounded-full h-2">
-                                            <div className="bg-pink h-2 rounded-full" style={{ width: '20%' }}></div>
-                                        </div>
-                                        <p className="text-xs text-gray-600 mt-1">API Limit: 10/50 requests</p>
+                                        <p className="text-sm font-medium text-gray-700">Current Plan: <span className="font-bold text-pink">Free Plan</span></p>
+                                        {apiUsage && (
+                                            <>
+                                                <div className="mt-1 bg-gray-200 rounded-full h-2">
+                                                    <div className="bg-pink h-2 rounded-full" style={{ width: `${(apiUsage.apiUsageCount / apiUsage.apiLimit) * 100}%` }}></div>
+                                                </div>
+                                                <p className="text-xs text-gray-600 mt-1">API Limit: {apiUsage.apiUsageCount}/{apiUsage.apiLimit} requests</p>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                                 <MenuItem>
@@ -87,8 +116,7 @@ const TopNav = () => {
 
             {/* Mobile Menu */}
             <div
-                className={`md:hidden bg-white shadow-lg transition-all duration-300 ease-in-out ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
-                    }`}
+                className={`md:hidden bg-white shadow-lg transition-all duration-300 ease-in-out ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}
             >
                 <NavItem to="/" icon={FaHome}>Home</NavItem>
                 <NavItem to="/about" icon={FaInfoCircle}>About</NavItem>
