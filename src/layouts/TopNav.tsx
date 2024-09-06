@@ -1,132 +1,108 @@
 import React, { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { FaBars, FaTimes, FaUser, FaHome, FaInfoCircle, FaSignInAlt } from 'react-icons/fa';
+import { IoMdLogOut } from 'react-icons/io';
+import { useAuth } from '../hooks/useAuth';
 
-const TopNav: React.FC = () => {
+const TopNav = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const { currentUser, logout } = useAuth();
 
     const toggleMenu = () => setIsOpen(!isOpen);
 
+    const NavItem = ({ to, icon: Icon, children }) => (
+        <NavLink
+            to={to}
+            className={({ isActive }) =>
+                `flex items-center px-4 py-2 text-sm transition ${isActive
+                    ? 'text-pink border-b-2 border-pink md:border-none'
+                    : 'text-darkBlue hover:text-pink'
+                }`
+            }
+            onClick={() => setIsOpen(false)}
+        >
+            <Icon className="mr-2" />
+            {children}
+        </NavLink>
+    );
+
     return (
         <nav className="bg-white shadow-lg fixed w-full z-50">
-            <div className="container mx-auto px-4 flex justify-between items-center h-16">
-                {/* Logo Section */}
-                <div className="flex items-center">
-                    <Link to="/" className="text-pink text-2xl font-bold">
+            <div className="container mx-auto px-4">
+                <div className="flex justify-between items-center h-16">
+                    <Link to="/" className="text-pink text-2xl font-bold flex items-center">
                         ChatMate
                     </Link>
-                </div>
 
-                {/* Links Section */}
-                <div className="hidden md:flex space-x-8">
-                    <NavLink
-                        to="/"
-                        className={({ isActive }) =>
-                            isActive
-                                ? 'text-pink border-b-2 border-pink transition'
-                                : 'text-darkBlue hover:text-pink transition'
-                        }
-                    >
-                        Home
-                    </NavLink>
-                    <NavLink
-                        to="/about"
-                        className={({ isActive }) =>
-                            isActive
-                                ? 'text-pink border-b-2 border-pink transition'
-                                : 'text-darkBlue hover:text-pink transition'
-                        }
-                    >
-                        About
-                    </NavLink>
-                    <NavLink
-                        to="/login"
-                        className={({ isActive }) =>
-                            isActive
-                                ? 'text-pink border-b-2 border-pink transition'
-                                : 'text-darkBlue hover:text-pink transition'
-                        }
-                    >
-                        Login
-                    </NavLink>
-                </div>
+                    <div className="hidden md:flex space-x-4">
+                        <NavItem to="/" icon={FaHome}>Home</NavItem>
+                        <NavItem to="/about" icon={FaInfoCircle}>About</NavItem>
+                        {!currentUser && <NavItem to="/login" icon={FaSignInAlt}>Login</NavItem>}
+                    </div>
 
-                {/* Mobile Menu Button */}
-                <button
-                    className="md:hidden text-darkBlue focus:outline-none"
-                    onClick={toggleMenu}
-                >
-                    {isOpen ? (
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            className="w-6 h-6"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
-                    ) : (
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            className="w-6 h-6"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M4 6h16M4 12h16M4 18h16"
-                            />
-                        </svg>
+                    {currentUser && (
+                        <Menu as="div" className="relative ml-3">
+                            <MenuButton className="flex items-center text-darkBlue hover:text-pink transition">
+                                <FaUser className="w-6 h-6" />
+                                <span className="ml-2 hidden md:inline">{currentUser.displayName || 'User'}</span>
+                            </MenuButton>
+                            <MenuItems className="absolute right-0 w-64 mt-2 origin-top-right bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none rounded-md">
+                                <div className="py-2 px-4 border-b border-gray-200">
+                                    <div className="px-4 py-3 bg-gradient-to-r from-pink to-purple-500 text-white">
+                                        <p className="font-semibold text-lg">{currentUser.displayName || 'User'}</p>
+                                        <p className="text-sm opacity-90">{currentUser.email}</p>
+                                    </div>
+                                    <div className="py-2 px-4 bg-gray-50">
+                                        <p className="text-sm font-medium text-gray-700">Current Plan: <span className="font-bold text-pink">Pro</span></p>
+                                        <div className="mt-1 bg-gray-200 rounded-full h-2">
+                                            <div className="bg-pink h-2 rounded-full" style={{ width: '20%' }}></div>
+                                        </div>
+                                        <p className="text-xs text-gray-600 mt-1">API Limit: 10/50 requests</p>
+                                    </div>
+                                </div>
+                                <MenuItem>
+                                    {({ active }) => (
+                                        <button
+                                            onClick={logout}
+                                            className={`flex items-center w-full px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                                        >
+                                            <IoMdLogOut className="mr-2" />
+                                            Logout
+                                        </button>
+                                    )}
+                                </MenuItem>
+                            </MenuItems>
+                        </Menu>
                     )}
-                </button>
+
+                    <button
+                        className="md:hidden text-darkBlue focus:outline-none"
+                        onClick={toggleMenu}
+                    >
+                        {isOpen ? <FaTimes className="w-6 h-6" /> : <FaBars className="w-6 h-6" />}
+                    </button>
+                </div>
             </div>
 
             {/* Mobile Menu */}
-            {isOpen && (
-                <div className="md:hidden bg-white shadow-lg">
-                    <NavLink
-                        to="/"
-                        className={({ isActive }) =>
-                            isActive
-                                ? 'block px-4 py-2  bg-pink text-white transition'
-                                : 'block px-4 py-2 text-darkBlue hover:bg-pink hover:text-white transition'
-                        }
-                        onClick={toggleMenu}
+            <div
+                className={`md:hidden bg-white shadow-lg transition-all duration-300 ease-in-out ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+                    }`}
+            >
+                <NavItem to="/" icon={FaHome}>Home</NavItem>
+                <NavItem to="/about" icon={FaInfoCircle}>About</NavItem>
+                {!currentUser && <NavItem to="/login" icon={FaSignInAlt}>Login</NavItem>}
+                {currentUser && (
+                    <button
+                        onClick={logout}
+                        className="flex items-center w-full px-4 py-2 text-sm text-darkBlue hover:bg-pink hover:text-white transition"
                     >
-                        Home
-                    </NavLink>
-                    <NavLink
-                        to="/about"
-                        className={({ isActive }) =>
-                            isActive
-                                ? 'block px-4 py-2  bg-pink text-white transition'
-                                : 'block px-4 py-2 text-darkBlue hover:bg-pink hover:text-white transition'
-                        }
-                        onClick={toggleMenu}
-                    >
-                        About
-                    </NavLink>
-                    <NavLink
-                        to="/login"
-                        className={({ isActive }) =>
-                            isActive
-                                ? 'block px-4 py-2  bg-pink text-white transition'
-                                : 'block px-4 py-2 text-darkBlue hover:bg-pink hover:text-white transition'
-                        }
-                        onClick={toggleMenu}
-                    >
-                        Login
-                    </NavLink>
-                </div>
-            )}
+                        <IoMdLogOut className="mr-2" />
+                        Logout
+                    </button>
+                )}
+            </div>
         </nav>
     );
 };
