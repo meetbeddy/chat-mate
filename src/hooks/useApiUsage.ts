@@ -22,9 +22,20 @@ export const useApiUsage = () => {
 			headers: { "Content-Type": "application/json" },
 		});
 		const data = await response.json();
+
 		if (data.apiUsageCount >= data.apiLimit) {
 			throw new Error("API usage limit exceeded");
 		}
+	}, []);
+
+	const getApiUsage = useCallback(async (userId: string) => {
+		const response = await fetch(`${API_BASE_URL}/api/usage?userId=${userId}`, {
+			method: "GET",
+			headers: { "Content-Type": "application/json" },
+		});
+		const data = await response.json();
+
+		return data;
 	}, []);
 
 	const updateApiUsage = useCallback(async (userId: string) => {
@@ -34,5 +45,5 @@ export const useApiUsage = () => {
 		});
 	}, []);
 
-	return { checkApiUsage, updateApiUsage };
+	return { checkApiUsage, updateApiUsage, getApiUsage };
 };
