@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { FaBars, FaTimes, FaUser, FaHome, FaInfoCircle, FaSignInAlt, FaMoneyBill } from 'react-icons/fa';
@@ -10,6 +10,13 @@ interface ApiUsage {
     apiUsageCount: number;
     apiLimit: number;
 }
+
+interface NavItemProps {
+    to: string;
+    icon: React.ComponentType<{ className?: string }>;
+    children: React.ReactNode;
+}
+
 
 const TopNav = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +43,7 @@ const TopNav = () => {
 
     const toggleMenu = () => setIsOpen(!isOpen);
 
-    const NavItem = ({ to, icon: Icon, children }) => (
+    const NavItem = ({ to, icon: Icon, children }: NavItemProps) => (
         <NavLink
             to={to}
             className={({ isActive }) =>
